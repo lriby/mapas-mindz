@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="pt-BR" class="nojs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="generator" content="Mindz">
+<meta name="robots" content="noindex">
+<title>Black Front 26</title>
+<script>document.documentElement.classList.remove("nojs")</script>
+<!-- Página gerada pelo Mindz (Arquivo → Exportar página interativa). Um arquivo só, sem internet. -->
+<style>
+:root {
+  --chrome: rgba(255,255,255,.84); --chrome-line: rgba(0,0,0,.08); --chrome-text: #2a2a2e;
+  --chrome-soft: rgba(0,0,0,.05); --muted: rgba(42,42,46,.55); --accent: #007AFF;
+  --shadow: 0 6px 24px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.06);
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+:root[data-theme="dark"] {
+  --chrome: rgba(44,44,46,.84); --chrome-line: rgba(255,255,255,.1); --chrome-text: #ededed;
+  --chrome-soft: rgba(255,255,255,.08); --muted: rgba(237,237,237,.55); --accent: #0A84FF;
+  --shadow: 0 6px 24px rgba(0,0,0,.35), 0 1px 3px rgba(0,0,0,.3);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; }
+body { background: #fff; font-family: var(--ui); -webkit-font-smoothing: antialiased; }
+
+#vp { position: fixed; inset: 0; overflow: hidden; touch-action: none; cursor: default;
+      -webkit-user-select: none; user-select: none; }
+#vp.panning, #vp.panning * { cursor: grabbing !important; }
+#stage { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+#edges { position: absolute; left: 0; top: 0; width: 1px; height: 1px; overflow: visible; }
+#edges path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+.topic { position: absolute; left: 0; top: 0; width: max-content; transform-origin: 50% 50%;
+         display: flex; flex-direction: column; align-items: center; gap: 6px;
+         font-family: var(--font); line-height: 1.3; border-radius: 5px; padding: 2px 3px; min-width: 20px; }
+.topic.d0 { font-size: 18px; font-weight: 700; padding: 11px 18px; border-radius: 12px; min-width: 100px; }
+.topic.d1 { font-size: 14px; font-weight: 500; }
+.topic.d2 { font-size: 13px; font-weight: 400; }
+.topic.bold { font-weight: 700; }
+.topic.pad { padding: 7px 12px; border-radius: 8px; }
+.topic.can { cursor: pointer; }
+@media (hover: hover) { .topic.plain.can:hover { background: var(--hov); } }
+.topic.hit::before, .topic.cur::before { content: ""; position: absolute; inset: -3px; border-radius: inherit;
+         background: rgba(255,216,77,.5); z-index: -1; }
+.topic.cur::before { background: rgba(255,216,77,.95); }
+.row { display: flex; align-items: center; gap: 5px; max-width: 100%; }
+.text { white-space: pre-wrap; overflow-wrap: anywhere; padding: 0 2px; text-align: left; }
+.d0 .text { max-width: 230px; text-align: center; }
+.d1 .text, .d2 .text { max-width: 250px; }
+.right .text { text-align: right; }
+.fixed .text { max-width: none; flex: 1 1 auto; min-width: 0; }
+.text.ph { opacity: .45; font-style: italic; font-weight: 400; }
+.emoji { flex: none; }
+.pic { display: block; border-radius: 6px; cursor: zoom-in; -webkit-user-drag: none; }
+.ic { flex: none; width: 14px; height: 14px; padding: 0; margin: 0; border: 0; background: none;
+      color: var(--ic); cursor: pointer; display: grid; place-items: center; border-radius: 4px; }
+.ic svg { width: 13px; height: 13px; }
+.ic::after { content: ""; position: absolute; width: 30px; height: 30px; } /* área de toque maior */
+.ic { position: relative; }
+.ic::after { left: -8px; top: -8px; }
+
+.knob { position: absolute; left: 0; top: 0; width: 24px; height: 22px; display: grid; place-items: center; cursor: pointer; }
+.knob i { display: block; box-sizing: border-box; width: 9px; height: 9px; border-radius: 50%;
+          border: 1.6px solid var(--c); background: var(--bg); opacity: 0; transition: opacity .15s; }
+.knob.hot i, .knob:hover i { opacity: 1; }
+@media (hover: none) { .knob i { opacity: 1; } }
+.knob b { display: none; min-width: 18px; height: 16px; padding: 0 4px; border-radius: 8px; background: var(--c); color: var(--bg);
+          font: 700 9.5px/16px ui-rounded, "SF Pro Rounded", var(--ui); text-align: center; }
+.knob.closed i { display: none; }
+.knob.closed b { display: block; }
+
+/* Barra de ferramentas */
+.bar { position: fixed; top: 14px; right: 14px; display: flex; align-items: center; gap: 2px; padding: 4px;
+       background: var(--chrome); border: 1px solid var(--chrome-line); border-radius: 14px; box-shadow: var(--shadow);
+       -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px); color: var(--chrome-text); z-index: 10; }
+.bar button { width: 32px; height: 32px; border: 0; border-radius: 9px; background: none; color: inherit; cursor: pointer;
+              display: grid; place-items: center; padding: 0; }
+.bar button:hover { background: var(--chrome-soft); }
+.bar button svg { width: 18px; height: 18px; }
+.bar .sep { width: 1px; height: 20px; background: var(--chrome-line); margin: 0 4px; }
+.bar .zoom { width: auto; min-width: 46px; padding: 0 4px; font: 500 12px var(--ui); font-variant-numeric: tabular-nums; color: var(--muted); }
+.search { display: flex; align-items: center; gap: 6px; height: 32px; padding: 0 8px 0 9px; border-radius: 9px; background: var(--chrome-soft); }
+.search svg { width: 15px; height: 15px; color: var(--muted); flex: none; }
+.search input { width: 150px; border: 0; outline: 0; background: none; color: inherit; font: 14px var(--ui); padding: 0; }
+.search input::placeholder { color: var(--muted); }
+.search .count { font: 500 12px var(--ui); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.search .count:empty { display: none; }
+
+/* Nota */
+.card { position: fixed; top: 64px; right: 14px; width: 360px; max-width: calc(100vw - 28px); max-height: calc(100vh - 92px);
+        display: none; flex-direction: column; background: var(--chrome); border: 1px solid var(--chrome-line); border-radius: 16px;
+        box-shadow: var(--shadow); color: var(--chrome-text); z-index: 11;
+        -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px); }
+.card.open { display: flex; }
+.card header { display: flex; align-items: flex-start; gap: 8px; padding: 14px 12px 10px 18px; border-bottom: 1px solid var(--chrome-line); }
+.card h2 { flex: 1; margin: 2px 0 0; font: 600 15px/1.35 var(--ui); white-space: pre-wrap; overflow-wrap: anywhere; }
+.card button { flex: none; width: 28px; height: 28px; border: 0; border-radius: 8px; background: none; color: var(--muted); cursor: pointer; display: grid; place-items: center; }
+.card button:hover { background: var(--chrome-soft); }
+.card .body { padding: 14px 18px 18px; overflow: auto; font: 14px/1.55 var(--ui); white-space: pre-wrap; overflow-wrap: anywhere;
+              -webkit-user-select: text; user-select: text; }
+.card a { color: var(--accent); }
+@media (max-width: 600px) {
+  .bar { left: 10px; right: 10px; top: 10px; justify-content: space-between; }
+  .search { flex: 1; min-width: 0; }
+  .search input { width: 100%; min-width: 0; }
+  .bar .zoom, .bar .opt { display: none; }
+  .card { top: auto; bottom: 10px; right: 10px; left: 10px; width: auto; max-width: none; max-height: 60vh; }
+}
+
+/* Imagem em tela cheia */
+.lb { position: fixed; inset: 0; display: none; place-items: center; background: rgba(0,0,0,.82); z-index: 20; cursor: zoom-out; }
+.lb.open { display: grid; }
+.lb img { max-width: 94vw; max-height: 94vh; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,.4); }
+
+.hint { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); padding: 8px 14px; border-radius: 12px;
+        background: var(--chrome); border: 1px solid var(--chrome-line); box-shadow: var(--shadow); color: var(--muted);
+        font: 13px var(--ui); white-space: nowrap; max-width: calc(100vw - 24px); overflow: hidden; text-overflow: ellipsis;
+        -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); transition: opacity .6s; z-index: 9; pointer-events: none; }
+.hint.gone { opacity: 0; }
+
+/* Sem JavaScript (barra de espaço no Finder, prévia do WhatsApp no Mac): só a foto do mapa. */
+.still { display: none; }
+.nojs .bar, .nojs .hint, .nojs #vp { display: none; }
+.nojs body { overflow: auto; }
+.nojs .still { min-height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+               gap: 14px; padding: 16px; }
+.still img { display: block; max-width: 100%; height: auto; }
+.still p { margin: 0; padding: 7px 14px; border-radius: 12px; background: rgba(127,127,127,.12); color: rgba(127,127,127,.95);
+           font: 13px var(--ui); text-align: center; }
+</style>
+</head>
+<body>
+<div id="vp"><div id="stage"><svg id="edges"></svg></div></div>
+
+<div class="bar ui">
+  <label class="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/></svg>
+    <input id="q" type="search" placeholder="Buscar" autocomplete="off" spellcheck="false">
+    <span class="count" id="qcount"></span>
+  </label>
+  <span class="sep opt"></span>
+  <button id="openAll" title="Abrir todos os tópicos" aria-label="Abrir todos os tópicos">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M12 9.5V3M9 6l3-3 3 3M12 14.5V21M9 18l3 3 3-3"/></svg>
+  </button>
+  <button id="closeAll" title="Fechar todos os tópicos" aria-label="Fechar todos os tópicos">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16M12 3v6.5M9 6.5l3 3 3-3M12 21v-6.5M9 17.5l3-3 3 3"/></svg>
+  </button>
+  <button id="center" title="Mostrar o mapa inteiro" aria-label="Mostrar o mapa inteiro">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="7"/><path d="M12 2.5v4M12 17.5v4M2.5 12h4M17.5 12h4"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg>
+  </button>
+  <span class="sep opt"></span>
+  <button id="zoomOut" class="opt" title="Diminuir" aria-label="Diminuir">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 12h12"/></svg>
+  </button>
+  <button id="zoomLabel" class="zoom" title="Tamanho real">100%</button>
+  <button id="zoomIn" class="opt" title="Aumentar" aria-label="Aumentar">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 12h12M12 6v12"/></svg>
+  </button>
+</div>
+
+<aside class="card ui" id="card">
+  <header><h2 id="cardTitle"></h2>
+    <button id="cardClose" aria-label="Fechar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </header>
+  <div class="body" id="cardBody"></div>
+</aside>
+<div class="lb ui" id="lb"><img id="lbImg" alt=""></div>
+<div class="hint" id="hint"></div>
+
+
+<script type="application/json" id="mapa">{"style":{"lines":"branches","boxes":false,"monoRoot":true,"branches":[3894518,10185714,1221503,15763755,15026253,959927,14239390],"background":"white","root":2829634,"font":"system"},"title":"Black Front 26","root":{"t":"Black Front 26","k":[{"s":"right","e":"🪖","k":[{"k":[{"t":"Ver o caso da Luísa","f":15026253,"k":[{"t":"Debriefing","k":[{"t":"Objetivo: Atrair pessoas novas e aumentar faturamento\n(pacientes próximos do vencimento sem perspectiva de\nrenovação)"},{"k":[{"k":[{"t":"Resultado de paciente"},{"t":"Feedback"},{"t":"Levantada de mão"}],"t":"Todos os dias nos stories","c":true}],"t":"Antecipação","c":true},{"c":true,"k":[{"t":"Mensal: 10% OFF"},{"t":"Trimestral: 15% OFF"},{"t":"Semestral: 10% OFF"},{"t":"Mensagens","c":true,"k":[{"t":"Lead","c":true,"k":[{"k":[{"c":true,"t":"Pontos importantes","k":[{"t":"Início:\n🎁 Tem um presente da nutri pra você!"},{"t":"Dia 31 deste mês comemoramos o  do\nNutricionista, e pra comemorar a nutri Giulia\nvai abrir uma condição especial a partir do dia\nx!\n\nSe estava só esperando uma oportunidade,\nme manda uma figurinha e, no dia x, você\nserá um dos primeiros a saber e terá\npreferência nas vagas!"},{"t":"Segunda mensagem de oferta\n\nO grande dia chegou 🌝"}]}],"t":"Olá [LEAD], espero que esteja bem!!\n\nEu estou com condições especiais nos planos\nessa semana por conta do Dia do Nutricionista\n:) posso te encaminhar essa promoção\nimperdível? 🥰","c":true}]},{"k":[{"t":"Oi, [EX-PACIENTE]! Tudo bem? 😊\nMuito prazerr, Sou a Tami, estagiária\nda Nutri Giu!\n\nEstou entrando em contato porque\nestamos com uma NOVIDADE 🤩: a\nSemana da Nutricionista começou e\na Nutri Giu preparou uma campanha\nsuper especial, com condições\ndiferenciadas nos planos de\nacompanhamento 🥳💰 🚀💚!\n\nComo você já fez acompanhamento\ncom a gente, pensamos que talvez\nesse seja o momento perfeito para\nvocê voltar, principalmente pelas\ncondições especiais da campanha\n👀✨🤭\n\nA Nutri Giu pode te apresentar as\nmelhores condições que o\nacompanhamento já teve? 🥰","k":[{"t":"Quando possível, mensagem\nindividualizada"}],"c":true}],"t":"Paciente antigo","c":true},{"k":[{"t":"Oiii [SEGUIDOR]! Tudo bemm?\nVi que vc reagiu ao story sobre a\ncondição especial de dia do nutri\n🤩✨ posso te mostrar as opções\nde acompanhamento únicas dessa\nsemana!? 🥰"}],"c":true,"t":"Levantada de mão"},{"t":"Oferta","k":[{"c":true,"k":[{"t":"Apresentar sempre valor parcelado,\nfacilita a ancoragem - citar\ndesconto à vista."}],"t":"Fico feliz que tenha interesse!!\n\nSEMANA DO NUTRICIONISTA 🍓 ✨\n\nEm comemoração, preparei com muito carinho uma condição\nespecial para quem já estava pensando em começar a cuidar da\nalimentação com acompanhamento de verdade e no longo prazo!\n\nDurante a Semana do Nutricionista, meus planos de\nacompanhamento estarão com descontos especiais 💚\n\n⭐ O destaque vai para o Plano Trimestral com -15% de desconto:\n\nDe R$ 1.065\nPor R$ 906 à vista ou 3x de 302,00 no pix 🚀\n\nSão 3 meses de acompanhamento, com 2 consultas, contato diário\npelo WhatsApp, feedbacks e todo o suporte necessário para você\nconstruir resultados de forma consistente!\n\nTambém teremos condições especiais nos outros planos com 10%\nOFF:\n\n✨ Plano Mensal: R$ 351 à vista\n✨ Plano Semestral: R$ 1.647 à vista ou 6x de 280,00 no pix\n✨ Plano Semestral Casal: R$ 2.965 à vista ou 6x de 499,00 no pix\n\n⚠️ Mas atenção: essa condição é por tempo limitado e válida somente\ndurante a Semana do Nutricionista de 24 a 31\/08; iniciando o\nacompanhamento até no máximo primeira semana de setembro!\n\nSe você estava esperando um motivo para começar, talvez seja esse.\n💚\nO que achou fulano!? Bora dar continuidade OU iniciar no nosso\nacompanhamento?"}],"c":true}]}],"t":"Oferta"},{"k":[{"k":[{"t":"10 reações às levantadas de mão","c":true,"k":[{"t":"7 Deram continuidade à conversa"},{"t":"Ainda sem fechamentos depois da\noferta"}]}],"c":true,"t":"Instagram"},{"c":true,"k":[{"t":"48 mensagens enviadas","c":true,"k":[{"t":"7 fechamentos","c":true,"k":[{"t":"3 Mensal"},{"t":"1 Trimestral"},{"t":"3 Semestral"}]},{"t":"9 Negociações"}]}],"t":"Pacientes antigos"},{"c":true,"k":[{"c":true,"k":[{"t":"Sem fechamentos ainda"}],"t":"34 mensagens HOJE"}],"t":"Leads antigos"},{"t":"Pontos importantes","k":[{"t":"Picos de venda no primeiro e\núltimo dias"},{"t":"Mensagem de lembrete de último\ndia + 1 a 1 para leads relevantes"}],"c":true}],"t":"Resultados","c":true}],"c":true},{"t":"Comentários","k":[{"c":true,"t":"Pontos mais importantes","k":[{"t":"Antecipação","k":[{"k":[{"t":"aviso pra \"não fazer agora\""},{"t":"Foto de uma parte do brinde"},{"t":"Parceiro confirmando a\nparticipação"},{"t":"Mensagem de quem recebeu a\nnotícia primeiro"},{"t":"Caixinha pra chutarem a novidade"}],"c":true,"t":"Gerar curiosidade, spoilers\nprogressivos"},{"k":[{"t":"Pacientes, ex-pacientes e leads\nquentes","c":true,"k":[{"t":"Oferta antecipada e \/ou diferente"}]},{"t":"Seguidores"},{"t":"Parceiros"}],"t":"Públicos","c":true}],"c":true},{"k":[{"t":"Urgência","c":true,"k":[{"t":"Válido até dia x"},{"t":"Oferta de primeiro dia"}]},{"c":true,"k":[{"t":"Poucas vagas"},{"t":"Primeiros x fechamentos"}],"t":"Escassez"},{"c":true,"k":[{"t":"Manifestação formal de interesse"},{"t":"Votou nas enquetes, respondeu\naos stories, pessoas prováveis"}],"t":"Ofertar para"},{"t":"Hora de usar \"hacks\" de Instagram"}],"t":"Oferta","c":true}]}]}]}],"t":"Condição especial - Dia do nutri"},{"t":"Campanha de Indicações Temática","c":true,"k":[{"f":15026253,"t":"Coloca Julia Bucchianco"},{"t":"Ideia","c":true,"k":[{"t":"Potencializar a campanha de\nindicação adicionando um tema em\nalta (Copa do Mundo)"}]},{"t":"Mensagem 1 na comunidade","k":[{"t":"⚽ VALENDO: COPA DAS\nINDICAÇÕES ⚽🚨\n\nA partir de hoje até o dia 30\/05,\ncomeça oficialmente a nossa Copa\ndas Indicações ⚽️\n\nA ideia é simples:\nvocês indicam pessoas que\nquerem melhorar alimentação,\nperformance, saúde ou\ncomposição corporal… e acumulam\npontos pra trocar por recompensas\ndentro e\/ou fora do\nacompanhamento.\n\nCOMO FUNCIONA:\n\n✅ Pessoa indicada entrou em\ncontato → 1 ponto\n✅ Pessoa indicada fechou\nacompanhamento → +4 pontos\n\nQuanto mais pontos, maiores as\nrecompensas 👀\n\n🏆 PREMIAÇÕES:\n🔹 3 pontos\n10% na renovação do plano\n+ 1 mês de acompanhamento\nbônus\n\n🔹 6 pontos\n+1 consulta\n+1 mês de acompanhamento\n\n🔹 10 pontos\n🇧🇷 Camisa licenciada do Brasil (ou\nprêmio equivalente)\n\n🥇 GRANDE PRÊMIO DA COPA\nO paciente com MAIOR pontuação\naté o final da campanha ganha:\n\n🏆 *Camisa oficial do Brasil\nou prêmio equivalente*\n\nVocês já vivem isso na prática e\nsabem como um acompanhamento\nbem feito muda rotina, resultado e\nconsistência. Agora podem ajudar\nalguém próximo a viver isso\ntambém 🔥\n\nQuem quiser participar, é só me\nchamar no privado ou enviar meu\ncontato pra pessoa.\n\nToda semana vou jogar o placar\naqui pra vocês acompanharem a\ncolocação de vocês.\n\nDito isso, estão liberados pra\npontuar rs. ⚽️\nVamos juntos mais uma vez! @all","e":"🚨"}],"c":true},{"t":"Mensagem 2 no privado\/consulta"},{"t":"Resultado","k":[{"c":true,"t":"Foram 5 entradas de pacientes\nnovos no trimestral com ticket de\n1020, entao foram 5200 reais no\nmes","k":[{"k":[{"t":"Entao foram mais 1600 + 2040 no\npós"}],"t":"E desses 5, acabei de renovar um\nsemestral e 2 trimestrais","c":true}]},{"t":"LTV"}],"c":true},{"t":"O que eu faria diferente","c":true,"k":[{"t":"Prospeção no 1-1 para todos os\npacientes"}]}]},{"t":"Estrutura de mídia paga perpétua\n(Tráfego pago)","k":[{"k":[{"t":"Atração"},{"t":"Nutrição e engajamento"},{"t":"Conversão"}],"t":"Estrutura","c":true},{"k":[{"t":"A média de investimento mensal\ndele fica em R$5.000,00\n\nDepois que começamos veicular\nesse funil, conseguimos ultrapassar\no faturamento de R$40.000,00\npor mês em vários meses\n\nA taxa de conversão varia bastante,\nporque ele teve muitas mudanças\nno comercial, mas no geral fica em\nmédia 6%"}],"c":true,"t":"P.s 1"},{"c":true,"k":[{"t":"Esse valor de investimento não é\numa regra\n\nTem nutricionistas que investem\nR$1.500,00 e conseguem um\nretorno interessante também\n\nTemos o XX e YY que estão\ninvestimento esse valor e\nconseguem uma taxa de conversão\nsuperior, inclusive. YY tem uma\ntaxa de conversão de 14% e o XX\nestá próximo de 10% (este mês\nestá 11%)\n\nPara nutricionistas que fazem\natendimento presencial, a taxa de\nconversão tem sido mais alta"}],"t":"P.s 2"},{"c":true,"k":[{"t":"Muito mais anúncios!"}],"t":"O que eu faria diferente"}],"c":true},{"t":"Pré consulta avaliativa","k":[{"t":"Ver com Rafa Garcia, Bia Oliveira, Carol Wanderloff - ver no tldv - Giulia Degressi","f":15026253},{"t":"Por que pensar nisso?","c":true,"k":[{"t":"Comunicação síncrona >>>","c":true,"k":[{"b":true,"f":16728089,"t":"Comunicação assíncrona"}],"b":true,"f":9886475},{"c":true,"k":[{"t":"Você tomando uma cervejinha com\na pessoa e conversando com ela","c":true,"k":[{"c":true,"k":[{"k":[{"t":"Mensagem"}],"t":"Ligação","c":true}],"t":"Reunião"}]}],"t":"A maior chance de \"conversão\""}]},{"c":true,"k":[{"t":"Recurso nas vendas","c":true,"k":[{"t":"Leads (contato) qualificados com\nobjeções"},{"t":"Leads qualificados com potencial\nde uma compra mais robusta"}]},{"k":[{"t":"Pré-consulta avaliativa \/\nDiagnóstico de performance \/\nSessão clareza \/ Raio x nutricional","c":true,"k":[{"c":true,"k":[{"t":"Instagram","c":true,"k":[{"k":[{"t":"Sempre destacar que não é para\ntodo mundo e que terá um\n\"processo seletivo\".","e":"🚨"}],"c":true,"t":"Levantadas de mão nos stories"},{"c":true,"t":"Direct","k":[{"t":"Social selling"}]}]},{"c":true,"k":[{"t":"Liberar para cada paciente, um\nconvite com prazo de validade\npara trazer um amigo"}],"t":"Pacientes"},{"t":"Parceiro","c":true,"k":[{"t":"Liberar para cada parceiro, um\nconvite com prazo de validade\npara trazer um amigo"},{"t":"Sempre que um aluno fechar o\nplano anual, ganha um encontro\ncom o nutri"},{"t":"Manicure: Voucher para ela\nentregar para as melhores\npacientes"}]},{"t":"Leads","c":true,"k":[{"t":"Mapear oportunidades em\nconversas e ações de follow up"}]}],"t":"Como divulgar"}]}],"c":true,"t":"Isca (Degustação)"}],"t":"Quando"},{"k":[{"t":"Através da conversa","k":[{"c":true,"k":[{"t":"E para leads que não passarem nos\ncritérios de qualificação?","k":[{"t":"Enviar algum material"}],"c":true}],"t":"Perguntas de qualificação"}],"c":true},{"c":true,"k":[{"t":"Formulário de aplicação"}],"t":"Padrão ouro"}],"t":"Como trazer apenas leads\nqualificados para a reunião","c":true}],"c":true},{"t":"Recuperação de Leads","c":true,"k":[{"k":[{"t":"Buscar vários depoimentos e um case de ação pontual"}],"c":true,"t":"Falar com Camila, Ver tldv quem mais","f":15026253}]}],"t":"\nBem-vindo\nao Front!"}]}}</script>
+<script>
+(function () {
+"use strict";
+const DATA = JSON.parse(document.getElementById("mapa").textContent);
+const S = DATA.style;
+const darkQuery = matchMedia("(prefers-color-scheme: dark)");
+const FONTS = {
+  system: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+  rounded: 'ui-rounded, "SF Pro Rounded", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  serif: 'ui-serif, "New York", Georgia, "Times New Roman", serif',
+  mono: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace',
+};
+document.documentElement.style.setProperty("--font", FONTS[S.font] || FONTS.system);
+
+const NOTE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.8h8l4.5 4.5V20a1.2 1.2 0 0 1-1.2 1.2H6A1.2 1.2 0 0 1 4.8 20V4A1.2 1.2 0 0 1 6 2.8z"/><path d="M8.5 12h7M8.5 16h7"/></svg>';
+const LINK_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4l-1.1 1.1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1.1-1.1"/></svg>';
+
+// ---------- Cores (as mesmas do app) ----------
+let dark = false;
+const rgb = n => [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+const hex = n => "#" + n.toString(16).padStart(6, "0");
+const rgba = (n, a) => { const [r, g, b] = rgb(n); return `rgba(${r},${g},${b},${a})`; };
+const mix = (bg, c, a) => { const x = rgb(bg), y = rgb(c); return `rgb(${x.map((v, i) => Math.round(v + (y[i] - v) * a)).join(",")})`; };
+const bgColor = () => ({ auto: dark ? 0x1C1C1E : 0xFFFFFF, white: 0xFFFFFF, paper: 0xF7F4EE, dark: 0x1C1C1E })[S.background] ?? 0xFFFFFF;
+const textColor = () => dark ? 0xEDEDED : 0x2A2A2E;
+const rootColor = () => dark && S.monoRoot ? 0xD8D8DC : S.root;
+const onFill = f => { const [r, g, b] = rgb(f); return (0.299 * r + 0.587 * g + 0.114 * b) / 255 > 0.62 ? 0x2A2A2E : 0xFFFFFF; };
+
+// ---------- Árvore ----------
+const all = [];
+function build(raw, parent, depth, index) {
+  const n = { raw, parent, depth, kids: [], i: all.length, el: null, shown: false,
+              collapsed: false, side: null, color: 0, w: 0, h: 0, tx: 0, ty: 0, cx: 0, cy: 0, co: 0, cs: 1 };
+  all.push(n);
+  if (depth === 1) {
+    n.side = raw.s || (index % 2 === 0 ? "right" : "left");
+    n.color = S.branches[index % S.branches.length];
+  } else if (depth > 1) {
+    n.side = parent.side; n.color = parent.color;
+  }
+  n.kids = (raw.k || []).map((k, i) => build(k, n, depth + 1, i));
+  n.collapsed = depth > 0 && !!raw.c && n.kids.length > 0;
+  n.count = n.kids.reduce((s, k) => s + 1 + k.count, 0);
+  return n;
+}
+const root = build(DATA.root, null, 0, 0);
+const branches = S.lines !== "curved";
+
+// ---------- Elementos ----------
+const vp = document.getElementById("vp"), stage = document.getElementById("stage"), svg = document.getElementById("edges");
+const SVGNS = "http://www.w3.org/2000/svg";
+
+function safeLink(link) {
+  link = String(link).trim();
+  if (/^(javascript|data|vbscript):/i.test(link)) return null;
+  if (!/^[a-z][a-z0-9+.-]*:/i.test(link)) link = "https://" + link;
+  return link;
+}
+
+function makeEl(n) {
+  const r = n.raw, el = document.createElement("div");
+  const boxed = n.depth === 0 || r.f != null || (n.depth === 1 && S.boxes);
+  el.className = "topic d" + Math.min(n.depth, 2) + (boxed ? "" : " plain") + (r.b ? " bold" : "")
+    + (n.depth > 0 && boxed ? " pad" : "") + (n.side === "left" && !boxed ? " right" : "")
+    + (n.depth > 0 && n.kids.length ? " can" : "") + (r.w ? " fixed" : "");
+  el.dataset.i = n.i;
+  if (r.img) {
+    const img = document.createElement("img");
+    img.className = "pic"; img.src = r.img; img.width = r.iw; img.height = r.ih; img.alt = ""; img.draggable = false;
+    el.append(img);
+  }
+  const showText = r.t !== "" || !r.img;
+  const link = r.l ? safeLink(r.l) : null;
+  if (showText || r.n || link || r.e) {
+    const row = document.createElement("div");
+    row.className = "row";
+    if (r.w) row.style.width = r.w + "px";
+    if (r.e) { const e = document.createElement("span"); e.className = "emoji"; e.textContent = r.e; row.append(e); }
+    if (showText) {
+      const t = document.createElement("span");
+      t.className = "text";
+      if (r.t === "" && r.noimg) { t.textContent = "imagem"; t.classList.add("ph"); }
+      else { t.textContent = r.t; if (r.t === "") t.style.minWidth = "40px"; }
+      row.append(t);
+    }
+    if (r.n) {
+      const b = document.createElement("button");
+      b.className = "ic note"; b.title = "Ver nota"; b.setAttribute("aria-label", "Ver nota"); b.innerHTML = NOTE_ICON;
+      row.append(b);
+    }
+    if (link) {
+      const a = document.createElement("a");
+      a.className = "ic link"; a.href = link; a.target = "_blank"; a.rel = "noopener noreferrer"; a.title = r.l; a.innerHTML = LINK_ICON;
+      row.append(a);
+    }
+    el.append(row);
+  }
+  n.el = el;
+  stage.append(el);
+  n.edge = n.depth > 0 ? svg.appendChild(document.createElementNS(SVGNS, "path")) : null;
+  if (n.edge) n.edge.setAttribute("stroke-width", n.depth === 1 ? 2.2 : 1.6);
+  if (n.depth > 0 && n.kids.length) {
+    if (branches) { n.stub = svg.appendChild(document.createElementNS(SVGNS, "path")); n.stub.setAttribute("stroke-width", 1.6); }
+    const k = document.createElement("div");
+    k.className = "knob"; k.dataset.i = n.i; k.innerHTML = "<i></i><b></b>";
+    k.querySelector("b").textContent = n.count > 99 ? "99+" : String(n.count);
+    n.knob = k; stage.append(k);
+    el.addEventListener("mouseenter", () => k.classList.add("hot"));
+    el.addEventListener("mouseleave", () => k.classList.remove("hot"));
+    refreshKnob(n);
+  }
+  paintNode(n);
+}
+
+function refreshKnob(n) { if (n.knob) n.knob.classList.toggle("closed", n.collapsed); }
+
+function paintNode(n) {
+  const r = n.raw, bg = bgColor(), el = n.el;
+  const color = n.depth === 0 ? rootColor() : n.color;
+  const fg = r.f != null ? onFill(r.f) : textColor();
+  el.style.color = hex(fg);
+  el.style.setProperty("--ic", hex(n.depth === 0 ? fg : n.color));
+  el.style.setProperty("--hov", rgba(textColor(), 0.06));
+  if (r.f != null) el.style.background = hex(r.f);
+  else if (n.depth === 0) el.style.background = mix(bg, color, dark ? 0.22 : 0.08);
+  else if (n.depth === 1 && S.boxes) el.style.background = mix(bg, color, dark ? 0.28 : 0.13);
+  if (n.edge) n.edge.setAttribute("stroke", hex(n.color));
+  if (n.stub) n.stub.setAttribute("stroke", hex(n.color));
+  if (n.knob) { n.knob.style.setProperty("--c", hex(n.color)); n.knob.style.setProperty("--bg", hex(bg)); }
+}
+
+function paint() {
+  dark = S.background === "dark" || (S.background === "auto" && darkQuery.matches);
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  document.body.style.background = hex(bgColor());
+  for (const n of all) if (n.el) paintNode(n);
+}
+
+// ---------- Posições (mesma conta do app) ----------
+const VGAP = d => d === 1 ? 22 : 9;
+const HGAP = parentDepth => parentDepth === 0 ? 52 : 38;
+const KNOB = 11, KNOB_R = 4.5;
+const openKids = n => (n.depth > 0 && n.collapsed) ? [] : n.kids;
+
+function visibleList() {
+  const out = [];
+  (function walk(n) { out.push(n); for (const k of openKids(n)) walk(k); })(root);
+  return out;
+}
+
+function ensureElements(list) {
+  const fresh = list.filter(n => !n.el);
+  for (const n of fresh) makeEl(n);
+  for (const n of fresh) { n.w = n.el.offsetWidth; n.h = n.el.offsetHeight; } // mede tudo de uma vez
+}
+
+function computeTargets() {
+  const heights = new Map();
+  const sub = n => {
+    if (heights.has(n)) return heights.get(n);
+    const ks = openKids(n);
+    let h = n.h;
+    if (ks.length) h = Math.max(h, ks.reduce((s, k) => s + sub(k), 0) + VGAP(n.depth + 1) * (ks.length - 1));
+    heights.set(n, h);
+    return h;
+  };
+  const placeKids = (kids, p, side) => {
+    if (!kids.length) return;
+    const gap = VGAP(p.depth + 1), hg = HGAP(p.depth);
+    const total = kids.reduce((s, k) => s + sub(k), 0) + gap * (kids.length - 1);
+    let y = p.ty + p.h / 2 - total / 2;
+    for (const k of kids) {
+      const st = sub(k);
+      k.tx = side === "right" ? p.tx + p.w + hg : p.tx - hg - k.w;
+      k.ty = y + st / 2 - k.h / 2;
+      placeKids(openKids(k), k, side);
+      y += st + gap;
+    }
+  };
+  root.tx = -root.w / 2; root.ty = -root.h / 2;
+  placeKids(root.kids.filter(k => k.side === "right"), root, "right");
+  placeKids(root.kids.filter(k => k.side === "left"), root, "left");
+}
+
+const knobAt = (n, x, y) => ({ x: n.side === "left" ? x - KNOB : x + n.w + KNOB, y: y + n.h / 2 });
+
+// ---------- Desenho e animação ----------
+const view = { x: 0, y: 0, z: 1 };
+let shown = [];
+let anim = 0;
+
+function applyView() {
+  stage.style.transform = `translate(${view.x}px,${view.y}px) scale(${view.z})`;
+  zoomLabel.textContent = Math.round(view.z * 100) + "%";
+}
+
+const f1 = v => Math.round(v * 10) / 10;
+function branchPath(sx, sy, ex, ey) {
+  const s = ex >= sx ? 1 : -1, spine = sx + s * (10 - KNOB_R), dy = ey - sy;
+  if (Math.abs(dy) < 1) return `M${f1(sx)} ${f1(sy)}L${f1(ex)} ${f1(ey)}`;
+  const v = dy > 0 ? 1 : -1, r = Math.min(7, Math.abs(dy) / 2, Math.abs(spine - sx));
+  return `M${f1(sx)} ${f1(sy)}L${f1(spine - s * r)} ${f1(sy)}Q${f1(spine)} ${f1(sy)} ${f1(spine)} ${f1(sy + v * r)}`
+       + `L${f1(spine)} ${f1(ey - v * r)}Q${f1(spine)} ${f1(ey)} ${f1(spine + s * r)} ${f1(ey)}L${f1(ex)} ${f1(ey)}`;
+}
+function curvePath(sx, sy, ex, ey) {
+  const m = (sx + ex) / 2;
+  return `M${f1(sx)} ${f1(sy)}C${f1(m)} ${f1(sy)} ${f1(m)} ${f1(ey)} ${f1(ex)} ${f1(ey)}`;
+}
+
+function drawFrame() {
+  for (const n of shown) {
+    n.el.style.transform = `translate(${n.cx}px,${n.cy}px)` + (n.cs !== 1 ? ` scale(${n.cs})` : "");
+    n.el.style.opacity = n.co;
+    if (n.knob) {
+      const k = knobAt(n, n.cx, n.cy);
+      n.knob.style.transform = `translate(${k.x - 12}px,${k.y - 11}px)`;
+      n.knob.style.opacity = n.co;
+    }
+    if (n.depth === 0) continue;
+    const p = n.parent, right = n.side !== "left", s = right ? 1 : -1;
+    const py = p.cy + p.h / 2;
+    const viaKnob = p.depth > 0 && branches;
+    let sx;
+    if (viaKnob) sx = knobAt(p, p.cx, p.cy).x + s * KNOB_R;
+    else if (p.depth === 0) sx = right ? p.cx + p.w - 2 : p.cx + 2;
+    else sx = right ? p.cx + p.w + 1 : p.cx - 1;
+    const half = n.w * n.cs / 2, mid = n.cx + n.w / 2;
+    const ex = right ? mid - half - 1 : mid + half + 1, ey = n.cy + n.h / 2;
+    n.edge.setAttribute("d", viaKnob ? branchPath(sx, py, ex, ey) : curvePath(sx, py, ex, ey));
+    n.edge.style.opacity = n.co;
+    if (n.stub) {
+      const y = n.cy + n.h / 2, kx = knobAt(n, n.cx, n.cy).x;
+      n.stub.setAttribute("d", `M${f1(right ? n.cx + n.w + 1 : n.cx - 1)} ${f1(y)}L${f1(kx + s * KNOB_R)} ${f1(y)}`);
+      n.stub.style.opacity = n.co;
+    }
+  }
+}
+
+function setShown(n, on) {
+  n.shown = on;
+  const d = on ? "" : "none";
+  n.el.style.display = d;
+  if (n.edge) n.edge.style.display = d;
+  if (n.stub) n.stub.style.display = d;
+  if (n.knob) n.knob.style.display = d;
+}
+
+/// Recalcula o mapa e anima até lá. `keep`: tópico que não deve sair do lugar na tela.
+/// `goal(view)`: ajusta a posição final da tela (centralizar, mostrar um resultado da busca).
+function relayout(animate, keep, goal) {
+  const before = keep ? { x: keep.tx, y: keep.ty } : null;
+  const list = visibleList();
+  ensureElements(list);
+  computeTargets();
+  const visible = new Set(list);
+  for (const n of list) {
+    n.gx = n.tx; n.gy = n.ty; n.go = 1; n.gs = 1;
+    if (!n.shown) {
+      const p = n.parent;
+      if (p) { const k = knobAt(p, p.tx, p.ty); n.cx = k.x - n.w / 2; n.cy = k.y - n.h / 2; } else { n.cx = n.tx; n.cy = n.ty; }
+      n.co = 0; n.cs = 0.2;
+      setShown(n, true);
+      shown.push(n);
+    }
+  }
+  for (const n of shown) {
+    if (visible.has(n)) continue;
+    let a = n.parent;
+    while (!visible.has(a)) a = a.parent;
+    const k = knobAt(a, a.tx, a.ty);
+    n.gx = k.x - n.w / 2; n.gy = k.y - n.h / 2; n.go = 0; n.gs = 0.2;
+  }
+  const target = { x: view.x, y: view.y, z: view.z };
+  if (before) { target.x -= (keep.tx - before.x) * view.z; target.y -= (keep.ty - before.y) * view.z; }
+  if (goal) goal(target);
+  run(animate, target, list);
+}
+
+function run(animate, target, list) {
+  cancelAnimationFrame(anim);
+  const finish = () => {
+    for (const n of shown) if (!list.includes(n)) setShown(n, false);
+    shown = list.slice();
+  };
+  const from = shown.map(n => [n.cx, n.cy, n.co, n.cs]);
+  const v0 = { ...view };
+  if (!animate || matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    for (const n of shown) { n.cx = n.gx; n.cy = n.gy; n.co = n.go; n.cs = n.gs; }
+    Object.assign(view, target);
+    applyView(); drawFrame(); finish();
+    return;
+  }
+  const t0 = performance.now(), dur = 300;
+  const ease = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const step = now => {
+    const t = Math.min(1, (now - t0) / dur), e = ease(t);
+    shown.forEach((n, i) => {
+      const f = from[i];
+      n.cx = f[0] + (n.gx - f[0]) * e; n.cy = f[1] + (n.gy - f[1]) * e;
+      n.co = f[2] + (n.go - f[2]) * e; n.cs = f[3] + (n.gs - f[3]) * e;
+    });
+    view.x = v0.x + (target.x - v0.x) * e; view.y = v0.y + (target.y - v0.y) * e; view.z = v0.z + (target.z - v0.z) * e;
+    applyView(); drawFrame();
+    if (t < 1) anim = requestAnimationFrame(step); else finish();
+  };
+  anim = requestAnimationFrame(step);
+}
+
+/// Só mexe na tela (os tópicos ficam onde estão).
+function moveView(animate, goal) {
+  for (const n of shown) { n.gx = n.cx; n.gy = n.cy; n.go = n.co; n.gs = n.cs; }
+  const target = { ...view };
+  goal(target);
+  run(animate, target, shown.slice());
+}
+
+// ---------- Enquadrar ----------
+const clampZoom = z => Math.min(3, Math.max(0.15, z));
+const topSpace = () => (innerWidth <= 600 ? 60 : 64);
+
+function fitGoal(target) {
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const n of visibleList()) {
+    x0 = Math.min(x0, n.tx - 28); x1 = Math.max(x1, n.tx + n.w + 28);
+    y0 = Math.min(y0, n.ty - 10); y1 = Math.max(y1, n.ty + n.h + 10);
+  }
+  const W = innerWidth, H = innerHeight - topSpace();
+  const z = clampZoom(Math.min(1, Math.max(0.45, Math.min((W - 40) / (x1 - x0), (H - 30) / (y1 - y0)))));
+  target.z = z;
+  target.x = W / 2 - (x0 + x1) / 2 * z;
+  target.y = topSpace() + H / 2 - (y0 + y1) / 2 * z;
+  // Mapa maior que a tela: o tópico central continua visível.
+  const m = 40, rx0 = target.x + root.tx * z, rx1 = target.x + (root.tx + root.w) * z;
+  if (rx0 < m) target.x += m - rx0; else if (rx1 > W - m) target.x -= rx1 - (W - m);
+  const ry0 = target.y + root.ty * z, ry1 = target.y + (root.ty + root.h) * z;
+  if (ry0 < topSpace() + m) target.y += topSpace() + m - ry0; else if (ry1 > innerHeight - m) target.y -= ry1 - (innerHeight - m);
+}
+
+function zoomAt(cx, cy, factor) {
+  const z = clampZoom(view.z * factor);
+  view.x = cx - (cx - view.x) * (z / view.z);
+  view.y = cy - (cy - view.y) * (z / view.z);
+  view.z = z;
+  applyView();
+}
+
+// ---------- Abrir e fechar ----------
+function toggle(n) {
+  n.collapsed = !n.collapsed;
+  refreshKnob(n);
+  relayout(true, n);
+}
+
+function setAll(collapsed) {
+  for (const n of all) if (n.depth > 0 && n.kids.length) { n.collapsed = collapsed; refreshKnob(n); }
+  relayout(true, null, collapsed ? fitGoal : null);
+}
+
+// ---------- Nota e imagem ----------
+const card = document.getElementById("card"), cardTitle = document.getElementById("cardTitle"), cardBody = document.getElementById("cardBody");
+function openNote(n) {
+  cardTitle.textContent = (n.raw.e ? n.raw.e + " " : "") + (n.raw.t || "Nota");
+  cardBody.textContent = "";
+  for (const part of n.raw.n.split(/(https?:\/\/[^\s<>"]+)/g)) {
+    if (/^https?:\/\//.test(part)) {
+      const a = document.createElement("a");
+      a.href = part; a.textContent = part; a.target = "_blank"; a.rel = "noopener noreferrer";
+      cardBody.append(a);
+    } else cardBody.append(part);
+  }
+  cardBody.scrollTop = 0;
+  card.classList.add("open");
+}
+const closeNote = () => card.classList.remove("open");
+document.getElementById("cardClose").onclick = closeNote;
+
+const lb = document.getElementById("lb"), lbImg = document.getElementById("lbImg");
+const openImage = src => { lbImg.src = src; lb.classList.add("open"); };
+lb.onclick = () => lb.classList.remove("open");
+
+// ---------- Busca ----------
+const q = document.getElementById("q"), qcount = document.getElementById("qcount");
+const fold = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const folded = all.map(n => fold(n.raw.t + "\n" + (n.raw.n || "")));
+let hits = [], hitIndex = 0, searchTimer = 0;
+
+function clearHits() { for (const n of hits) if (n.el) n.el.classList.remove("hit", "cur"); }
+function runSearch() {
+  clearHits();
+  const term = fold(q.value.trim());
+  hits = term ? all.filter(n => folded[n.i].includes(term)) : [];
+  hitIndex = 0;
+  if (!hits.length) { qcount.textContent = term ? "0" : ""; return; }
+  for (const n of hits) for (let a = n.parent; a; a = a.parent) if (a.collapsed) { a.collapsed = false; refreshKnob(a); }
+  showHit(true);
+}
+function showHit(relayoutFirst) {
+  const n = hits[hitIndex];
+  qcount.textContent = (hitIndex + 1) + "/" + hits.length;
+  const goal = t => {
+    const W = innerWidth, H = innerHeight - topSpace();
+    t.x = W / 2 - (n.tx + n.w / 2) * t.z;
+    t.y = topSpace() + H / 2 - (n.ty + n.h / 2) * t.z;
+  };
+  if (relayoutFirst) relayout(true, null, goal); else moveView(true, goal);
+  for (const h of hits) { h.el.classList.add("hit"); h.el.classList.toggle("cur", h === n); }
+}
+q.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(runSearch, 160); });
+q.addEventListener("keydown", e => {
+  if (e.key === "Enter" && hits.length) {
+    e.preventDefault();
+    hitIndex = (hitIndex + (e.shiftKey ? hits.length - 1 : 1)) % hits.length;
+    showHit(false);
+  } else if (e.key === "Escape") { q.value = ""; runSearch(); q.blur(); }
+});
+
+// ---------- Mouse, toque e teclado ----------
+const pointers = new Map();
+let drag = null, pinch = null, moved = false;
+
+vp.addEventListener("pointerdown", e => {
+  if (e.pointerType === "mouse" && e.button !== 0) return;
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pointers.size === 1) { drag = { x: e.clientX, y: e.clientY, vx: view.x, vy: view.y }; moved = false; }
+  else if (pointers.size === 2) {
+    const [a, b] = [...pointers.values()];
+    pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2, ...view };
+    drag = null; moved = true;
+  }
+  hideHint();
+});
+addEventListener("pointermove", e => {
+  if (!pointers.has(e.pointerId)) return;
+  pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pinch && pointers.size >= 2) {
+    const [a, b] = [...pointers.values()];
+    const z = clampZoom(pinch.z * Math.hypot(a.x - b.x, a.y - b.y) / pinch.d);
+    const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+    view.x = mx - (pinch.mx - pinch.x) * (z / pinch.z);
+    view.y = my - (pinch.my - pinch.y) * (z / pinch.z);
+    view.z = z;
+    applyView();
+  } else if (drag) {
+    const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (!moved && Math.hypot(dx, dy) > 4) { moved = true; vp.classList.add("panning"); cancelAnimationFrame(anim); }
+    if (moved) { view.x = drag.vx + dx; view.y = drag.vy + dy; applyView(); }
+  }
+});
+const pointerEnd = e => {
+  if (!pointers.delete(e.pointerId)) return;
+  if (pointers.size < 2) pinch = null;
+  if (pointers.size === 1) { const [p] = [...pointers.values()]; drag = { x: p.x, y: p.y, vx: view.x, vy: view.y }; }
+  if (pointers.size === 0) { drag = null; vp.classList.remove("panning"); }
+};
+addEventListener("pointerup", pointerEnd);
+addEventListener("pointercancel", pointerEnd);
+
+// Depois de arrastar o mapa, o clique não abre nada.
+vp.addEventListener("click", e => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
+vp.addEventListener("click", e => {
+  const knob = e.target.closest(".knob");
+  if (knob) { toggle(all[knob.dataset.i]); return; }
+  const el = e.target.closest(".topic");
+  if (!el) { closeNote(); return; }
+  const n = all[el.dataset.i];
+  if (e.target.closest(".note")) { openNote(n); return; }
+  if (e.target.closest(".link")) return; // o próprio link abre numa aba nova
+  if (e.target.closest(".pic")) { openImage(n.raw.img); return; }
+  if (n.depth > 0 && n.kids.length) toggle(n);
+});
+
+vp.addEventListener("wheel", e => {
+  e.preventDefault();
+  hideHint();
+  cancelAnimationFrame(anim);
+  if (e.ctrlKey || e.metaKey) { zoomAt(e.clientX, e.clientY, Math.exp(-e.deltaY * (e.deltaMode === 1 ? 0.05 : 0.01))); return; }
+  let dx = e.deltaX, dy = e.deltaY;
+  if (e.deltaMode === 1) { dx *= 16; dy *= 16; }
+  if (e.shiftKey && !dx) { dx = dy; dy = 0; }
+  view.x -= dx; view.y -= dy;
+  applyView();
+}, { passive: false });
+
+// Safari no Mac: pinça no trackpad.
+let gestureZoom = 1;
+document.addEventListener("gesturestart", e => { e.preventDefault(); gestureZoom = view.z; });
+document.addEventListener("gesturechange", e => {
+  e.preventDefault();
+  if (!pinch) zoomAt(e.clientX || innerWidth / 2, e.clientY || innerHeight / 2, clampZoom(gestureZoom * e.scale) / view.z);
+});
+
+const zoomLabel = document.getElementById("zoomLabel");
+const zoomCenter = f => zoomAt(innerWidth / 2, (innerHeight + topSpace()) / 2, f);
+document.getElementById("zoomIn").onclick = () => zoomCenter(1.25);
+document.getElementById("zoomOut").onclick = () => zoomCenter(0.8);
+zoomLabel.onclick = () => zoomCenter(1 / view.z);
+document.getElementById("center").onclick = () => moveView(true, fitGoal);
+document.getElementById("openAll").onclick = () => setAll(false);
+document.getElementById("closeAll").onclick = () => setAll(true);
+
+addEventListener("keydown", e => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "f") { e.preventDefault(); q.focus(); q.select(); return; }
+  if (e.key === "Escape") { lb.classList.remove("open"); closeNote(); return; }
+  if (e.target === q || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === "+" || e.key === "=") zoomCenter(1.25);
+  else if (e.key === "-") zoomCenter(0.8);
+  else if (e.key === "0") moveView(true, fitGoal);
+  else if (e.key === "/") { e.preventDefault(); q.focus(); }
+});
+
+// ---------- Dica de uso ----------
+const hint = document.getElementById("hint");
+const touch = matchMedia("(hover: none)").matches;
+hint.textContent = touch
+  ? "Toque num tópico para abrir ou fechar · arraste para mover · dois dedos para zoom"
+  : "Clique num tópico para abrir ou fechar · arraste para mover · pinça ou ⌘ + rolagem para zoom";
+let hintTimer = setTimeout(hideHint, 7000);
+function hideHint() { clearTimeout(hintTimer); hint.classList.add("gone"); }
+
+// ---------- Início ----------
+paint();
+darkQuery.addEventListener("change", paint);
+relayout(false, null, fitGoal);
+addEventListener("resize", () => applyView());
+})();
+</script>
+</body>
+</html>
